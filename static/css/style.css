@@ -1,0 +1,24 @@
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand img {
+    height: 40px;
+    margin-right: 10px;
+}
+
+.card img {
+    height: 200px;
+    object-fit: cover;
+}
+
+
+nav {
+    background: #222;
+    padding: 10px;
+}
+nav a {
+    color: white;
+    margin-right: 10px;
+    text-decoration: none;
+}

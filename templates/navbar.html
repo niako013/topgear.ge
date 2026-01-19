@@ -1,0 +1,25 @@
+ <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<div class="container">
+<a class="navbar-brand" href="https://www.tbceducation.ge/" target="_blank">
+<img src="{{ url_for('static', filename='images/tbc_logo.png') }}"> Cars Site
+
+</a>
+
+
+
+<div class="navbar-nav ms-auto">
+<a class="nav-link" href="/">Home</a>
+<a class="nav-link" href="/cars">Cars</a>
+{% if current_user.is_authenticated %}
+{% if current_user.is_admin %}
+<a class="nav-link" href="/add_car">Add Car</a>
+{% endif %}
+<a class="nav-link" href="/logout">Logout</a>
+{% else %}
+<a class="nav-link" href="/login">Login</a>
+<a class="nav-link" href="/register">Sign Up</a>
+{% endif %}
+</div>
+</div>
+</nav>

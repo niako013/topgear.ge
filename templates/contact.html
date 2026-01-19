@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}კონტაქტი - Top Gear{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 text-center mb-5">
+            <h2 class="fw-bold text-uppercase">დაგვიკავშირდით</h2>
+            <p class="text-muted">ჩვენი გუნდი მზად არის დაგეხმაროთ 24/7-ზე</p>
+        </div>
+    </div>
+
+    <div class="row g-4 justify-content-center text-center">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <div class="display-5 text-warning mb-3">📞</div>
+                <h5 class="fw-bold">დაგვირეკეთ</h5>
+                <p class="text-muted">გაქვთ კითხვები? დაგვიკავშირდით:</p>
+                <a href="tel:+995555123456" class="btn btn-outline-warning fw-bold">+995 555 12 34 56</a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <div class="display-5 text-primary mb-3">📍</div>
+                <h5 class="fw-bold">მისამართი</h5>
+                <p class="text-muted">გვეწვიეთ ოფისში:</p>
+                <p class="fw-bold">თბილისი, ვაჟა-ფშაველას გამზ. #10</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4">
+                <div class="display-5 text-danger mb-3">📧</div>
+                <h5 class="fw-bold">მოგვწერეთ</h5>
+                <p class="text-muted">ელ-ფოსტა ოფიციალური წერილებისთვის:</p>
+                <p class="fw-bold text-primary">rent@topgear.ge</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

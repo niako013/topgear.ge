@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}ჩემი პროფილი - Top Gear{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">👋 მოგესალმებით, {{ current_user.username }}</h2>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">📋 თქვენი ჯავშნები</h5>
+        </div>
+        <div class="card-body">
+            {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>მანქანა</th>
+                                <th>თარიღი</th>
+                                <th>ტიპი</th>
+                                <th>ფასი</th>
+                                <th>მოქმედება</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>
+                                    <strong>{{ booking.car.brand }} {{ booking.car.model }}</strong>
+                                </td>
+                                <td>{{ booking.date.strftime('%d-%m-%Y %H:%M') }}</td>
+                                <td>
+                                    <span class="badge {{ 'bg-info' if booking.duration_type == 'საათობრივი' else 'bg-success' }}">
+                                        {{ booking.duration_type }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if booking.duration_type == 'საათობრივი' %}
+                                        {{ booking.car.price_hourly }} ₾ / სთ
+                                    {% else %}
+                                        {{ booking.car.price_daily }} ₾ / დღე
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ url_for('cancel_booking', booking_id=booking.id) }}"
+                                       class="btn btn-outline-danger btn-sm"
+                                       onclick="return confirm('ნამდვილად გსურთ ჯავშნის გაუქმება?')">
+                                        გაუქმება
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-muted">თქვენ ჯერ არ გაქვთ აქტიური ჯავშნები.</p>
+                <a href="{{ url_for('cars') }}" class="btn btn-primary">დაათვალიერე კატალოგი</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

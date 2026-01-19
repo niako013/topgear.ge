@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}{{ car.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('cars') }}" class="text-decoration-none text-dark">კატალოგი</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ car.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="position-relative">
+                <img src="{{ url_for('static', filename='images/' + car.image) }}"
+                     class="img-fluid rounded-4 shadow-lg w-100"
+                     alt="{{ car.name }}"
+                     style="max-height: 550px; object-fit: cover;">
+                <span class="position-absolute top-0 start-0 m-3 badge bg-warning text-dark fs-6 px-3 py-2 shadow-sm">Premium</span>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="ps-lg-3">
+                <h1 class="display-5 fw-bold mb-2 text-dark">{{ car.name }}</h1>
+                <p class="text-muted fs-5 mb-4"><i class="fas fa-calendar-alt me-2"></i>{{ car.year }} წლის მოდელი</p>
+
+                <hr class="my-4">
+
+                <div class="card border-warning border-2 bg-light mb-4 shadow-sm">
+                    <div class="card-body py-4">
+                        <div class="row text-center">
+                            <div class="col border-end">
+                                <p class="text-uppercase text-muted small fw-bold mb-1">დღიური</p>
+                                <h3 class="fw-bold mb-0 text-dark">{{ car.price_daily }} ₾</h3>
+                            </div>
+                            <div class="col">
+                                <p class="text-uppercase text-muted small fw-bold mb-1">საათობრივი</p>
+                                <h3 class="fw-bold mb-0 text-dark">{{ car.price_hourly }} ₾</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-info-circle me-2 text-warning"></i>ავტომობილის შესახებ</h5>
+                    <p class="text-secondary lh-lg">
+                        {{ car.description }}
+                    </p>
+                </div>
+
+                <div class="d-grid gap-3 pt-2">
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="{{ url_for('book_car', car_id=car.id, type='დღიური') }}"
+                               class="btn btn-warning btn-lg w-100 fw-bold shadow-sm py-3">
+                                <i class="fas fa-sun me-2"></i>დღიური
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a href="{{ url_for('book_car', car_id=car.id, type='საათობრივი') }}"
+                               class="btn btn-outline-dark btn-lg w-100 fw-bold py-3">
+                                <i class="fas fa-clock me-2"></i>საათობრივი
+                            </a>
+                        </div>
+                    </div>
+
+                    <a href="{{ url_for('cars') }}" class="btn btn-link text-dark text-decoration-none mt-2">
+                        <i class="fas fa-arrow-left me-2"></i>უკან კატალოგში
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

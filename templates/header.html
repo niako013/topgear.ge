@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold text-warning" href="{{ url_for('index') }}">
+            <i class="fas fa-car me-2"></i> TOP GEAR
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">მთავარი</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('cars') }}">კატალოგი</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('contact') }}">კონტაქტი</a></li>
+
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                <li class="nav-item">
+                    <a class="nav-link text-warning fw-bold" href="{{ url_for('admin_page') }}">
+                        <i class="fas fa-cog me-1"></i> ადმინ პანელი
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+
+            <div class="d-flex align-items-center">
+                <a href="tel:+995555123456" class="btn btn-outline-warning btn-sm rounded-pill px-3 me-3 d-none d-lg-block">
+                    <i class="fas fa-phone-alt me-2"></i> 555 12 34 56
+                </a>
+
+                {% if current_user.is_authenticated %}
+                    <span class="text-info me-3 d-none d-md-inline small">
+                        <i class="fas fa-user me-1"></i> {{ current_user.username }}
+                    </span>
+                    <a href="{{ url_for('profile') }}" class="btn btn-warning btn-sm me-2">პროფილი</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">გასვლა</a>
+                {% else %}
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm me-2">შესვლა</a>
+                    <a href="{{ url_for('register') }}" class="btn btn-warning btn-sm">რეგისტრაცია</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Edit Car</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+    <input
+        class="form-control mb-2"
+        name="brand"
+        value="{{ car.brand }}"
+        required
+    >
+
+    <input
+        class="form-control mb-2"
+        name="model"
+        value="{{ car.model }}"
+        required
+    >
+
+    <input
+        class="form-control mb-2"
+        name="price"
+        value="{{ car.price }}"
+        required
+    >
+
+    <input
+        class="form-control mb-2"
+        type="file"
+        name="image"
+    >
+
+    <button class="btn btn-warning">Update Car</button>
+</form>
+{% endblock %}

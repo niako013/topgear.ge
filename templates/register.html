@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}რეგისტრაცია{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-4 fw-bold">რეგისტრაცია</h2>
+                    <form method="POST">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">მომხმარებლის სახელი</label>
+                            {{ form.username(class="form-control form-control-lg", placeholder="მაგ: goga123") }}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">პაროლი</label>
+                            {{ form.password(class="form-control form-control-lg", placeholder="••••••••") }}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-dark btn-lg shadow-sm">შექმენი ანგარიში</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <p class="text-muted">უკვე გაქვს აქაუნთი? <a href="{{ url_for('login') }}" class="text-decoration-none">შესვლა</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

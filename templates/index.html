@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}მთავარი - TOP GEAR{% endblock %}
+
+{% block content %}
+<div class="bg-dark text-white py-5 mb-5 shadow-lg" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1500&q=80'); background-size: cover; background-position: center;">
+    <div class="container py-5 text-center">
+        <h1 class="display-1 fw-bold mb-3 text-uppercase">Top Gear Georgia</h1>
+        <p class="lead mb-4 fs-3 text-light">აღმოაჩინე შენი ოცნების ავტომობილი ჩვენს კატალოგში</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+            <a href="{{ url_for('cars') }}" class="btn btn-warning btn-lg px-4 gap-3 fw-bold text-uppercase shadow">ნახე კატალოგი</a>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-light btn-lg px-4 fw-bold text-uppercase">რეგისტრაცია</a>
+        </div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="row text-center g-4">
+        <div class="col-md-4">
+            <div class="p-4 border-0 rounded-4 bg-white shadow-sm h-100">
+                <div class="display-4 mb-2">🚀</div>
+                <h4 class="fw-bold">სწრაფი ძებნა</h4>
+                <p class="text-muted">იპოვე სასურველი მოდელი წამებში ჩვენი მოქნილი სისტემით.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 border-0 rounded-4 bg-white shadow-sm h-100">
+                <div class="display-4 mb-2">💎</div>
+                <h4 class="fw-bold">ხარისხი</h4>
+                <p class="text-muted">ჩვენთან მხოლოდ საუკეთესო მდგომარეობაში მყოფი ავტომობილებია.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="p-4 border-0 rounded-4 bg-white shadow-sm h-100">
+                <div class="display-4 mb-2">🔒</div>
+                <h4 class="fw-bold">უსაფრთხოება</h4>
+                <p class="text-muted">თქვენი მონაცემები და ტრანზაქციები სრულად დაცულია.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row align-items-center g-5">
+        <div class="col-lg-6">
+            <h2 class="display-5 fw-bold mb-3">რატომ TOP GEAR?</h2>
+            <p class="text-muted fs-5">ჩვენი პლატფორმა შექმნილია ავტომობილების მოყვარულებისთვის. აქ შეგიძლიათ გაეცნოთ უახლეს მოდელებს, ნახოთ დეტალური მონაცემები და შეინახოთ თქვენი რჩეული ავტომობილები.</p>
+            <ul class="list-unstyled mt-4">
+                <li class="mb-2"><i class="text-success">✔</i> 1000-ზე მეტი ავტომობილი</li>
+                <li class="mb-2"><i class="text-success">✔</i> ყოველდღიური განახლებები</li>
+                <li><i class="text-success">✔</i> ექსკლუზიური მოდელები</li>
+            </ul>
+        </div>
+        <div class="col-lg-6 text-center">
+            <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-4 shadow-lg" alt="Car Image">
+        </div>
+    </div>
+</div>
+{% endblock %}

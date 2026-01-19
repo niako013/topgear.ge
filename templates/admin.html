@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}ადმინ პანელი - Top Gear{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h3 class="mb-0">🏎️ ახალი მანქანის დამატება</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('admin_page') }}">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ბრენდი</label>
+                            {{ form.brand(class="form-control", placeholder="მაგ: BMW") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">მოდელი</label>
+                            {{ form.model(class="form-control", placeholder="მაგ: M5") }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">წელი</label>
+                                {{ form.year(class="form-control", placeholder="2024") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">ფოტოს სახელი</label>
+                                {{ form.image(class="form-control", placeholder="bmw.jpg") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">დღიური ფასი (₾)</label>
+                                <input type="number" name="price_daily" class="form-control" placeholder="მაგ: 150" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">საათობრივი ფასი (₾)</label>
+                                <input type="number" name="price_hourly" class="form-control" placeholder="მაგ: 25" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">აღწერა</label>
+                            {{ form.description(class="form-control", rows="3", placeholder="მოკლე ინფორმაცია მანქანაზე...") }}
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold">მონაცემების შენახვა</button>
+                            <a href="{{ url_for('cars') }}" class="btn btn-outline-secondary">კატალოგზე დაბრუნება</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white py-3">
+            <h4 class="mb-0 text-center">📊 ყველა ჯავშნის მართვა</h4>
+        </div>
+        <div class="card-body">
+            {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>მომხმარებელი</th>
+                                <th>ავტომობილი</th>
+                                <th>ტიპი</th>
+                                <th>თარიღი</th>
+                                <th>სტატუსი</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td class="fw-bold text-primary">{{ booking.user.username }}</td>
+                                <td>{{ booking.car.brand }} {{ booking.car.model }}</td>
+                                <td>
+                                    <span class="badge {{ 'bg-info' if booking.duration_type == 'საათობრივი' else 'bg-success' }}">
+                                        {{ booking.duration_type }}
+                                    </span>
+                                </td>
+                                <td>{{ booking.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>
+                                    <span class="badge bg-warning text-dark">აქტიური</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-center text-muted py-4">ამჟამად ჯავშნები არ ფიქსირდება.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

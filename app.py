@@ -82,6 +82,26 @@ def contact():
     return render_template("contact.html")
 
 
+@app.route("/book/<int:car_id>/<string:type>")
+@login_required
+def book_car(car_id, type):
+    # ვპოულობთ მანქანას
+    car = Car.query.get_or_404(car_id)
+
+    # ვქმნით ჯავშანს და ვინახავთ ტიპსაც (დღიური/საათობრივი)
+    new_booking = Booking(
+        user_id=current_user.id,
+        car_id=car.id
+        # თუ შენს Booking მოდელში გაქვს 'booking_type' ველი, შეგიძლია აქ მიანიჭო:
+        # type=type
+    )
+
+    db.session.add(new_booking)
+    db.session.commit()
+
+    flash(f"ავტომობილი {car.name} ({type} ჯავშანი) წარმატებით დაემატა თქვენს პროფილში!", "success")
+    return redirect(url_for("profile"))
+
 # ადმინ პანელი
 @app.route("/admin", methods=["GET", "POST"])
 @login_required

@@ -11,7 +11,7 @@
                     <h3 class="mb-0">🏎️ ახალი მანქანის დამატება</h3>
                 </div>
                 <div class="card-body p-4">
-                    <form method="POST" action="{{ url_for('admin_page') }}">
+                    <form method="POST" action="{{ url_for('admin_page') }}" enctype="multipart/form-data">
                         {{ form.hidden_tag() }}
 
                         <div class="mb-3">
@@ -30,8 +30,8 @@
                                 {{ form.year(class="form-control", placeholder="2024") }}
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label fw-bold">ფოტოს სახელი</label>
-                                {{ form.image(class="form-control", placeholder="bmw.jpg") }}
+                                <label class="form-label fw-bold">აირჩიეთ ფოტო</label>
+                                {{ form.image(class="form-control") }}
                             </div>
                         </div>
 
@@ -105,5 +105,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

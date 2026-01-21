@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField,TextAreaField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, Length
+from flask_wtf.file import FileField, FileAllowed
 
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3)])
@@ -12,10 +13,17 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
+
+
 class CarForm(FlaskForm):
-    brand = StringField('Brand', validators=[DataRequired()])
-    model = StringField('Model', validators=[DataRequired()])
-    year = IntegerField('Year', validators=[DataRequired()])
-    image = StringField('Image filename', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    submit = SubmitField('Save')
+    brand = StringField('ბრენდი', validators=[DataRequired()])
+    model = StringField('მოდელი', validators=[DataRequired()])
+    year = IntegerField('წელი', validators=[DataRequired()])
+    description = TextAreaField('აღწერა', validators=[DataRequired()])
+    # შევცვალეთ StringField ფაილის ასარჩევი ველით
+    image = FileField('ავტომობილის ფოტო', validators=[
+        DataRequired(),
+        FileAllowed(['jpg', 'png', 'jpeg'], 'მხოლოდ ფოტოები (jpg, png)!')
+    ])
+    description = TextAreaField('აღწერა', validators=[DataRequired()])
+    submit = SubmitField('შენახვა')

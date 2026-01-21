@@ -9,9 +9,9 @@ app = Flask(__name__)
 
 # 1. კონფიგურაცია
 app.config["SECRET_KEY"] = "top_gear_secret_key_123"
-# Render-ისთვის SQLite-ის გზის დაზუსტება - სახელი შეცვლილია 'topgear_final_v1.db'
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "topgear_final_v1.db")
+# ბაზის ახალი სახელი, რომ Render-მა სუფთა ბაზა შექმნას
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "ultimate_topgear_v2.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # 2. ინსტრუმენტების დაკავშირება
@@ -67,6 +67,11 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and user.password == form.password.data:
+            # თუ ადმინის იუზერია, იძულებით მივცეთ is_admin სტატუსი შესვლისას
+            if user.username == "topgeargeorgia.admin":
+                user.is_admin = True
+                db.session.commit()
+
             login_user(user)
             return redirect(url_for("index"))
         else:
@@ -89,6 +94,7 @@ def profile():
 
 @app.route("/contact")
 def contact():
+    # დავტოვე ისე, როგორც გქონდა
     return render_template("contact.html")
 
 
@@ -111,12 +117,10 @@ def book_car(car_id, type):
     return redirect(url_for("profile"))
 
 
-# ამ ფუნქციას ვამატებთ app.py-ში სხვა @app.route-ების გვერდით
 @app.route("/cancel_booking/<int:booking_id>")
 @login_required
 def cancel_booking(booking_id):
     booking = Booking.query.get_or_404(booking_id)
-    # ვამოწმებთ, რომ ნამდვილად ამ იუზერისაა ეს ჯავშანი
     if booking.user_id == current_user.id or current_user.is_admin:
         db.session.delete(booking)
         db.session.commit()
@@ -126,11 +130,9 @@ def cancel_booking(booking_id):
     return redirect(url_for('profile'))
 
 
-
 @app.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin_page():
-    # დაცვა: მხოლოდ ადმინი შედის
     if not current_user.is_admin:
         flash("თქვენ არ გაქვთ წვდომა ამ გვერდზე", "danger")
         return redirect(url_for("index"))
@@ -159,12 +161,8 @@ def admin_page():
 # --- ბაზის შექმნა და ადმინის ავტომატური მართვა ---
 with app.app_context():
     db.create_all()
-
-    # ვეძებთ კონკრეტულ იუზერს
     admin_user = User.query.filter_by(username="topgeargeorgia.admin").first()
-
     if not admin_user:
-        # თუ საერთოდ არ არსებობს, ვქმნით
         admin_user = User(
             username="topgeargeorgia.admin",
             password="lewishamilton8timewdc",
@@ -172,9 +170,7 @@ with app.app_context():
         )
         db.session.add(admin_user)
     else:
-        # თუ არსებობს, ვამოწმებთ რომ ნამდვილად ადმინი იყოს
         admin_user.is_admin = True
-
     db.session.commit()
 
 if __name__ == "__main__":

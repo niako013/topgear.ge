@@ -9,9 +9,9 @@ app = Flask(__name__)
 
 # 1. კონფიგურაცია
 app.config["SECRET_KEY"] = "top_gear_secret_key_123"
-# Render-ისთვის SQLite-ის გზის დაზუსტება
+# Render-ისთვის SQLite-ის გზის დაზუსტება - სახელი შეცვლილია 'topgear_final_v1.db'
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "new_topgear.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "topgear_final_v1.db")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 # 2. ინსტრუმენტების დაკავშირება
@@ -111,6 +111,22 @@ def book_car(car_id, type):
     return redirect(url_for("profile"))
 
 
+# ამ ფუნქციას ვამატებთ app.py-ში სხვა @app.route-ების გვერდით
+@app.route("/cancel_booking/<int:booking_id>")
+@login_required
+def cancel_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    # ვამოწმებთ, რომ ნამდვილად ამ იუზერისაა ეს ჯავშანი
+    if booking.user_id == current_user.id or current_user.is_admin:
+        db.session.delete(booking)
+        db.session.commit()
+        flash("ჯავშანი გაუქმებულია", "success")
+    else:
+        flash("თქვენ არ გაქვთ ამის უფლება", "danger")
+    return redirect(url_for('profile'))
+
+
+
 @app.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin_page():
@@ -156,7 +172,7 @@ with app.app_context():
         )
         db.session.add(admin_user)
     else:
-        # თუ არსებობს (მაგრამ შეიძლება False იყოს), ვაქცევთ ადმინად
+        # თუ არსებობს, ვამოწმებთ რომ ნამდვილად ადმინი იყოს
         admin_user.is_admin = True
 
     db.session.commit()

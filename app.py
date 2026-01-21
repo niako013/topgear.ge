@@ -114,6 +114,7 @@ def book_car(car_id, type):
 @app.route("/admin", methods=["GET", "POST"])
 @login_required
 def admin_page():
+    # დაცვა: მხოლოდ ადმინი შედის
     if not current_user.is_admin:
         flash("თქვენ არ გაქვთ წვდომა ამ გვერდზე", "danger")
         return redirect(url_for("index"))
@@ -139,19 +140,26 @@ def admin_page():
     return render_template("admin.html", form=form, bookings=bookings)
 
 
-# ბაზის შექმნა და ადმინის ავტომატური დამატება
+# --- ბაზის შექმნა და ადმინის ავტომატური მართვა ---
 with app.app_context():
     db.create_all()
-    # ვამოწმებთ არსებობს თუ არა ადმინი
+
+    # ვეძებთ კონკრეტულ იუზერს
     admin_user = User.query.filter_by(username="topgeargeorgia.admin").first()
+
     if not admin_user:
-        new_admin = User(
+        # თუ საერთოდ არ არსებობს, ვქმნით
+        admin_user = User(
             username="topgeargeorgia.admin",
             password="lewishamilton8timewdc",
             is_admin=True
         )
-        db.session.add(new_admin)
-        db.session.commit()
+        db.session.add(admin_user)
+    else:
+        # თუ არსებობს (მაგრამ შეიძლება False იყოს), ვაქცევთ ადმინად
+        admin_user.is_admin = True
+
+    db.session.commit()
 
 if __name__ == "__main__":
     app.run(debug=True)

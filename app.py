@@ -11,7 +11,7 @@ app = Flask(__name__)
 # კონფიგურაცია
 app.config["SECRET_KEY"] = "top_gear_secret_123"
 basedir = os.path.abspath(os.path.dirname(__file__))
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "instance", "final_database.db")
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(basedir, "instance", "ultimate_db.db")
 
 # ბაზის და ლოგინის ინიციალიზაცია
 db.init_app(app)

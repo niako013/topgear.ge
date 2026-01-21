@@ -48,7 +48,6 @@ def car_detail(car_id):
 def register():
     form = RegisterForm()
     if form.validate_on_submit():
-        # ვამოწმებთ, უკვე ხომ არ არსებობს ასეთი მომხმარებელი
         existing_user = User.query.filter_by(username=form.username.data).first()
         if existing_user:
             flash("ეს სახელი უკვე დაკავებულია", "danger")
@@ -93,19 +92,16 @@ def contact():
     return render_template("contact.html")
 
 
-# --- დაჯავშნის გასწორებული ფუნქცია ---
 @app.route("/book/<int:car_id>/<string:type>")
 @login_required
 def book_car(car_id, type):
     car = Car.query.get_or_404(car_id)
-
-    # შენს მოდელში არის duration_type, ამიტომ აქ ვანიჭებთ მნიშვნელობას
     booking_type_ge = "საათობრივი" if type == "hourly" else "დღიური"
 
     new_booking = Booking(
         user_id=current_user.id,
         car_id=car.id,
-        duration_type=booking_type_ge  # ეს ემთხვევა models.py-ს
+        duration_type=booking_type_ge
     )
 
     db.session.add(new_booking)
@@ -143,9 +139,19 @@ def admin_page():
     return render_template("admin.html", form=form, bookings=bookings)
 
 
-# ბაზის შექმნა
+# ბაზის შექმნა და ადმინის ავტომატური დამატება
 with app.app_context():
     db.create_all()
+    # ვამოწმებთ არსებობს თუ არა ადმინი
+    admin_user = User.query.filter_by(username="topgeargeorgia.admin").first()
+    if not admin_user:
+        new_admin = User(
+            username="topgeargeorgia.admin",
+            password="lewishamilton8timewdc",
+            is_admin=True
+        )
+        db.session.add(new_admin)
+        db.session.commit()
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -23,23 +23,27 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
+# --- მთავარი გვერდი ---
 @app.route("/")
 def index():
     return render_template("index.html")
 
 
+# --- კატალოგი ---
 @app.route("/cars")
 def cars():
     all_cars = Car.query.all()
     return render_template("cars.html", cars=all_cars)
 
 
+# --- მანქანის დეტალები ---
 @app.route("/car/<int:car_id>")
 def car_detail(car_id):
     car = Car.query.get_or_404(car_id)
     return render_template("car_detail.html", car=car)
 
 
+# --- ავტორიზაცია ---
 @app.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm()
@@ -52,6 +56,7 @@ def login():
     return render_template("login.html", form=form)
 
 
+# --- რეგისტრაცია ---
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
@@ -78,6 +83,7 @@ def admin_page():
 
     form = CarForm()
     if form.validate_on_submit():
+        # ფოტოს შენახვა
         file = form.image.data
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.root_path, 'static', 'images', filename))
@@ -97,7 +103,7 @@ def admin_page():
         return redirect(url_for("admin_page"))
 
     bookings = Booking.query.all()
-    all_cars = Car.query.all()  # ცხრილისთვის
+    all_cars = Car.query.all()
     return render_template("admin.html", form=form, bookings=bookings, cars=all_cars)
 
 
@@ -109,6 +115,7 @@ def edit_car(car_id):
         return redirect(url_for("index"))
 
     car = Car.query.get_or_404(car_id)
+    # obj=car ავტომატურად ავსებს ფორმას ბაზაში არსებული ინფოთი
     form = CarForm(obj=car)
 
     if form.validate_on_submit():
@@ -119,6 +126,7 @@ def edit_car(car_id):
         car.price_daily = request.form.get('price_daily')
         car.price_hourly = request.form.get('price_hourly')
 
+        # თუ ახალ ფოტოს ატვირთავ, ჩაანაცვლებს ძველს
         if form.image.data:
             file = form.image.data
             filename = secure_filename(file.filename)
@@ -129,15 +137,19 @@ def edit_car(car_id):
         flash("მონაცემები განახლდა!", "success")
         return redirect(url_for("admin_page"))
 
-    return render_template("admin.html", form=form, edit_mode=True, car=car, bookings=Booking.query.all(),
-                           cars=Car.query.all())
+    # გადავცემთ ყველაფერს, რომ ცხრილები არ გაქრეს ედიტის დროს
+    all_cars = Car.query.all()
+    bookings = Booking.query.all()
+    return render_template("admin.html", form=form, edit_mode=True, car=car, bookings=bookings, cars=all_cars)
 
 
+# --- წაშლა ---
 @app.route("/delete_car/<int:car_id>")
 @login_required
 def delete_car(car_id):
     if not current_user.is_admin:
         return redirect(url_for("index"))
+
     car = Car.query.get_or_404(car_id)
     db.session.delete(car)
     db.session.commit()
@@ -145,6 +157,7 @@ def delete_car(car_id):
     return redirect(url_for("admin_page"))
 
 
+# --- დაჯავშნა ---
 @app.route("/book/<int:car_id>/<string:type>")
 @login_required
 def book_car(car_id, type):
@@ -156,6 +169,7 @@ def book_car(car_id, type):
     return redirect(url_for("profile"))
 
 
+# --- პროფილი ---
 @app.route("/profile")
 @login_required
 def profile():
@@ -163,6 +177,7 @@ def profile():
     return render_template("profile.html", bookings=user_bookings)
 
 
+# --- ჯავშნის გაუქმება ---
 @app.route("/cancel_booking/<int:booking_id>")
 @login_required
 def cancel_booking(booking_id):
@@ -174,17 +189,20 @@ def cancel_booking(booking_id):
     return redirect(url_for("profile"))
 
 
+# --- გასვლა ---
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
 
+# --- კონტაქტი ---
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
 
 
+# --- ბაზის ინიციალიზაცია ---
 with app.app_context():
     db.create_all()
     admin = User.query.filter_by(username="topgeargeorgia.admin").first()

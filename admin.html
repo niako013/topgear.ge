@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+
+{% block title %}ადმინ პანელი - Top Gear{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-dark text-white text-center py-3">
+                    <h3 class="mb-0">{% if edit_mode %}✎ რედაქტირება: {{ car.brand }}{% else %}🏎️ ახალი მანქანის დამატება{% endif %}</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{{ url_for('edit_car', car_id=car.id) if edit_mode else url_for('admin_page') }}" enctype="multipart/form-data">
+                        {{ form.hidden_tag() }}
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">ბრენდი</label>
+                            {{ form.brand(class="form-control") }}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">მოდელი</label>
+                            {{ form.model(class="form-control") }}
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">წელი</label>
+                                {{ form.year(class="form-control") }}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">ფოტო {% if edit_mode %}(დატოვეთ ცარიელი უცვლელად){% endif %}</label>
+                                {{ form.image(class="form-control") }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">დღიური ფასი (₾)</label>
+                                <input type="number" name="price_daily" class="form-control" value="{{ car.price_daily if edit_mode else '' }}" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">საათობრივი ფასი (₾)</label>
+                                <input type="number" name="price_hourly" class="form-control" value="{{ car.price_hourly if edit_mode else '' }}" required>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">აღწერა</label>
+                            {{ form.description(class="form-control", rows="3") }}
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold">{% if edit_mode %}ცვლილებების შენახვა{% else %}მანქანის დამატება{% endif %}</button>
+                            {% if edit_mode %}<a href="{{ url_for('admin_page') }}" class="btn btn-outline-secondary">გაუქმება</a>{% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-primary text-white py-3">
+            <h4 class="mb-0 text-center">🚗 მანქანების მართვა</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle text-center">
+                    <thead>
+                        <tr>
+                            <th>ფოტო</th>
+                            <th>მანქანა</th>
+                            <th>ფასი (დღე/სთ)</th>
+                            <th>მოქმედება</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in cars %}
+                        <tr>
+                            <td><img src="{{ url_for('static', filename='images/' + car.image) }}" width="60" class="rounded"></td>
+                            <td>{{ car.brand }} {{ car.model }} ({{ car.year }})</td>
+                            <td>{{ car.price_daily }}₾ / {{ car.price_hourly }}₾</td>
+                            <td>
+                                <a href="{{ url_for('edit_car', car_id=car.id) }}" class="btn btn-sm btn-outline-warning text-dark">✎</a>
+                                <a href="{{ url_for('delete_car', car_id=car.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('ნამდვილად გსურთ წაშლა?')">✖</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5 mb-5">
+    <div class="card shadow-lg border-0">
+        <div class="card-header bg-danger text-white py-3">
+            <h4 class="mb-0 text-center">📊 ყველა ჯავშნის მართვა</h4>
+        </div>
+        <div class="card-body">
+            {% if bookings %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle text-center">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>მომხმარებელი</th>
+                                <th>ავტომობილი</th>
+                                <th>ტიპი</th>
+                                <th>თარიღი</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td class="fw-bold text-primary">{{ booking.user.username }}</td>
+                                <td>{{ booking.car.brand }} {{ booking.car.model }}</td>
+                                <td>{{ booking.duration_type }}</td>
+                                <td>{{ booking.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-center text-muted py-4">ამჟამად ჯავშნები არ ფიქსირდება.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

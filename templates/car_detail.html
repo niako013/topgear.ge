@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}{{ car.name }}{% endblock %}
+{% block title %}{{ car.brand }} {{ car.model }}{% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ url_for('cars') }}" class="text-decoration-none text-dark">კატალოგი</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ car.name }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ car.brand }} {{ car.model }}</li>
         </ol>
     </nav>
 
@@ -16,7 +16,7 @@
             <div class="position-relative">
                 <img src="{{ url_for('static', filename='images/' + car.image) }}"
                      class="img-fluid rounded-4 shadow-lg w-100"
-                     alt="{{ car.name }}"
+                     alt="{{ car.brand }} {{ car.model }}"
                      style="max-height: 550px; object-fit: cover;">
                 <span class="position-absolute top-0 start-0 m-3 badge bg-warning text-dark fs-6 px-3 py-2 shadow-sm">Premium</span>
             </div>
@@ -24,7 +24,7 @@
 
         <div class="col-lg-5">
             <div class="ps-lg-3">
-                <h1 class="display-5 fw-bold mb-2 text-dark">{{ car.name }}</h1>
+                <h1 class="display-5 fw-bold mb-2 text-dark">{{ car.brand }} {{ car.model }}</h1>
                 <p class="text-muted fs-5 mb-4"><i class="fas fa-calendar-alt me-2"></i>{{ car.year }} წლის მოდელი</p>
 
                 <hr class="my-4">
